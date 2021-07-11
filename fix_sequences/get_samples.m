@@ -19,11 +19,18 @@ function X = get_samples(sigma, mu, a, q, N, x0)
     mu = (mu' * NN)';
     x0 = NN'*x0;
     
-    [eps_step, x0, prob_step_in] = Initialize_hmc_leapfrog_Dual_Avg(A, b, X0, sigma, mu, a, q, N, 0.65);
-    X = hmc_leapfrog(A, b, x0, sigma, mu, a, q, N, eps_step);
+    size(A)
+    sqrt_sum = sqrt(sum(A.^2,2));
+    A = A ./ repmat(sqrt_sum, [1 n-1]);
+    b = b ./ sqrt_sum;
+    %sqrt_sum = sqrt(sum(A.^2,2))
+    
+    [eps_step, x0, ~] = Initialize_hmc_leapfrog_Dual_Avg(A, b, x0, sigma, mu, a, q, 1000, 0.65);
+    eps_step
+    X = hmc_leapfrog(A, b, x0, sigma, mu, a, q, N, eps_step/4);
     %X = hmc_leapfrog(A, b, x0, sigma, mu, a, q, N);
     
-    X = NN * X;
+    X = NN * X + repmat(shift, [1 N]);
 
 end
 

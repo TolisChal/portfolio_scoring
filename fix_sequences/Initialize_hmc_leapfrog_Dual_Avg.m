@@ -2,9 +2,11 @@ function [eps_step, X0, prob_step_in] = Initialize_hmc_leapfrog_Dual_Avg(A, b, X
 % Reflective Hamiltonian Monte Carlo to sample from f truncated to the set
 % of the correlation matrices
     
+    d = length(muu);
+
     Delta_max = 1000;
     
-    eps_step = 0.05;
+    eps_step = 0.01;
     mu = log(10*eps_step);
     log_tilde_eps = 0;
     H_tilde = 0;
@@ -25,10 +27,10 @@ function [eps_step, X0, prob_step_in] = Initialize_hmc_leapfrog_Dual_Avg(A, b, X
             v_min = -v;
             X_pl = X0;
             X_min = X0;
-            Ti_pl = T0i;
-            Ti_min = T0i;
+            %Ti_pl = T0i;
+            %Ti_min = T0i;
             X_nx = X0;
-            Ti_nx = T0i;
+            %Ti_nx = T0i;
             %v_nx = v;
             grad_x_pl = a * (2*(sigma*X0) - q*muu); 
             grad_x_min = grad_x_pl;
@@ -61,7 +63,7 @@ function [eps_step, X0, prob_step_in] = Initialize_hmc_leapfrog_Dual_Avg(A, b, X
                     %Ti = Ti_min;
                 end
                 X_rnd_j = X;
-                Ti_rnd_j = Ti;
+                %Ti_rnd_j = Ti;
                 %v_rnd_j = v;
                 
                 x_counting = 0;
@@ -70,12 +72,18 @@ function [eps_step, X0, prob_step_in] = Initialize_hmc_leapfrog_Dual_Avg(A, b, X
                     v = v - (eps_step/2) * grad_x;
                     T = eps_step;
                     
+                    lambdas = (b - A*X) ./ A*v;
+                    [~, pos_max] = min(1./lambdas);
                     total_num_steps = total_num_steps + 1;
                 
                     while(true)
                     
-                        
-                        lambdas = (b - A*x) ./ A*v;
+                        %grad_x
+                        %norm_v = norm(v);
+                        %v = v / norm_v;
+                        lambdas = (b - A*X) ./ (A*v);
+                        %pos_max
+                        lambdas(pos_max) = -1;
                         [l_max, pos_max] = max(1./lambdas);
                         l_max = 1 / l_max;
                     
@@ -88,20 +96,19 @@ function [eps_step, X0, prob_step_in] = Initialize_hmc_leapfrog_Dual_Avg(A, b, X
                             break;
                         end
                         
-                        lambda = 0.995 * l_max;
+                        lambda = 0.995*l_max;
                         %x = x + lambda * v;
-                        X = X + lambda * v;
+                        X = X + lambda* v;
                         %Ti = Ti + lambda * v((n+1):end);
                     
                         %reflevt the ray
                         v = v - (2*A(pos_max, :)*v)*A(pos_max, :)';
+                        %v = v*norm_v;
                         %p = pos(pos_max);
                         %    vv(p) = -vv(p);
                         %    v(1:n) = vv;
                     
-                        T = T - lambda; 
-                        
-                        
+                        T = T - lambda;
                     end
                     grad_x = a * (2*(sigma*X) - q*muu); 
                     v = v - (eps_step/2) * grad_x;
@@ -197,7 +204,7 @@ function [eps_step, X0, prob_step_in] = Initialize_hmc_leapfrog_Dual_Avg(A, b, X
             %if (u < h1-h2)
                 %filter_acc = filter_acc + 1;
                 X0 = X_nx;
-                T0i = Ti_nx;
+                %T0i = Ti_nx;
             %end
         %end
         

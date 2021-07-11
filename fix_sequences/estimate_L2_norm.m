@@ -1,7 +1,7 @@
-function norm_const = esti_norm_cost(sigma, q, mu, N, alpha)
+function dist = estimate_L2_norm(sigma, mu, q, a1, a2, X)
 
     n = length(mu);
-    X = Sampling_simplex(n, N, 'RM');
+    N = size(X, 2);
     
     q_mu = q*(mu'*X);
     
@@ -13,7 +13,8 @@ function norm_const = esti_norm_cost(sigma, q, mu, N, alpha)
         log_xSx(i) = X(:,i)' * Sx(:,i);
     
     end
-    
-    norm_const = mean(exp(- alpha * (log_xSx - q_mu)));
 
+    dist = mean(exp((- a1 + a2) * (log_xSx - q_mu))) * mean(exp((a1 - a2) * (log_xSx - q_mu)));
+    
 end
+

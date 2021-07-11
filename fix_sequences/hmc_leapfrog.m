@@ -1,11 +1,11 @@
-function X = hmc_leapfrog(A, b, X0, sigma, mu, a, q, N, step)
+function XX = hmc_leapfrog(A, b, X0, sigma, mu, a, q, N, step)
     
     d = length(mu);
     Delta_max = 1000;
     
-    X = zeros(n, N);
+    XX = zeros(d, N);
     
-    %h = waitbar(0,'Computing samples...');
+    h = waitbar(0,'Computing samples...');
     for i = 1:N
         
         x_counting_total = 0;
@@ -55,13 +55,21 @@ function X = hmc_leapfrog(A, b, X0, sigma, mu, a, q, N, step)
                 
             x_counting = 0;
             for k = 1:2^j
+                %grad_x
                 v = v - (step/2) * grad_x;
                 T = step;
                 
+                lambdas = (b - A*X) ./ A*v;
+                [~, pos_max] = min(1./lambdas);
+                
                 while(true)
                     
-                    
-                    lambdas = (b - A*x) ./ A*v;
+                    %v
+                    %norm_v = norm(v);
+                    %v = v / norm_v;
+                    lambdas = (b - A*X) ./ (A*v);
+                    %pos_max
+                    lambdas(pos_max) = -1;
                     [l_max, pos_max] = max(1./lambdas);
                     l_max = 1 / l_max;
                     
@@ -74,7 +82,7 @@ function X = hmc_leapfrog(A, b, X0, sigma, mu, a, q, N, step)
                         break;
                     end
                         
-                    lambda = 0.995 * l_max;
+                    lambda = 0.995*l_max;
                     %x = x + lambda * v;
                     X = X + lambda * v;
                     %Ti = Ti + lambda * v((n+1):end);
@@ -85,7 +93,7 @@ function X = hmc_leapfrog(A, b, X0, sigma, mu, a, q, N, step)
                     %    vv(p) = -vv(p);
                     %    v(1:n) = vv;
                     
-                    T = T - lambda;     
+                    T = T - lambda;
                 end
                 
                 %grad_x = esti_grad_opt(f_utils, X, Ti);
@@ -167,12 +175,12 @@ function X = hmc_leapfrog(A, b, X0, sigma, mu, a, q, N, step)
                     s = 0;
                 end
             end
-                
+            waitbar(i/N);
         end
         
-        X(:,i) = X0;
+        XX(:,i) = X0;
     end
-
+    close(h);
 end
 
 
