@@ -1,7 +1,10 @@
 addpath('./fix_sequences')
 addpath('./mcmc_diagnostics')
+addpath('./compute_integrals')
 
 d = 3;
+
+N = 10000;
 
 mu = rand(d,1);
 sigma = rand(d);
@@ -24,13 +27,17 @@ scatter3(X(1,:),X(2,:),X(3,:),25,vals,'.')
 
 x0 = ptfs(:,1);
 
-Y = get_samples(sigma, mu, a*5, q, 5000, x0);
+[as, samples] = compute_a_sequence(sigma, mu, q, M, x0, N);
 
-figure
-plot3(Y(1,:), Y(2,:), Y(3,:), '.')
-xlim([0 1])
-ylim([0 1])
-zlim([0 1])
+for i = as
+    Y = get_samples(sigma, mu, i, q, 5000, x0);
+
+    figure
+    plot3(Y(1,:), Y(2,:), Y(3,:), '.')
+    xlim([0 1])
+    ylim([0 1])
+    zlim([0 1])
+end
 %N = 5000;
 %as = compute_a_sequence(sigma, mu, q, 4, max_vol, x0, N);
 

@@ -5,7 +5,7 @@ function XX = hmc_leapfrog(A, b, X0, sigma, mu, a, q, N, step)
     
     XX = zeros(d, N);
     
-    h = waitbar(0,'Computing samples...');
+    %h = waitbar(0,'Computing samples...');
     for i = 1:N
         
         x_counting_total = 0;
@@ -175,12 +175,12 @@ function XX = hmc_leapfrog(A, b, X0, sigma, mu, a, q, N, step)
                     s = 0;
                 end
             end
-            waitbar(i/N);
+            %waitbar(i/N);
         end
         
         XX(:,i) = X0;
     end
-    close(h);
+    %close(h);
 end
 
 

@@ -1,9 +1,9 @@
-function X = get_samples(sigma, mu, a, q, N, x0)
+function X = get_samples_restricted(sigma, mu, a, q, N, R, r)
     
     n = length(mu);
     
-    A = [ eye(n) ; -eye(n)];
-    b = [ ones(n,1) ; zeros(n,1)];
+    A = [ eye(n) ; -eye(n); R];
+    b = [ ones(n,1) ; zeros(n,1); r];
     Aeq = [ ones(1,n) ];
     beq = [ 1 ];
     

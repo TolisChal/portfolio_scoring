@@ -17,9 +17,9 @@ function [eps_step, X0, prob_step_in] = Initialize_hmc_leapfrog_Dual_Avg(A, b, X
     total_num_steps = 0;
     total_num_steps_in = 0;
     
-    h = waitbar(0,'Estimating a good step length for ReHMC...');
+    %h = waitbar(0,'Estimating a good step length for ReHMC...');
     for i = 1:N
-        i
+        %i
         %for jj = 1:W
             x_counting_total = 0;
             v = randn(d, 1);
@@ -214,12 +214,12 @@ function [eps_step, X0, prob_step_in] = Initialize_hmc_leapfrog_Dual_Avg(A, b, X
         %filter_acc
         %filter_num
         
-        waitbar(i/N);
+        %waitbar(i/N);
     end
     %acc_prob = filter_acc / filter_num;
     eps_step = exp(log_eps);
     prob_step_in = total_num_steps_in / total_num_steps;
     %exp(log_tilde_eps)
-    close(h);
+    %close(h);
 end
 
