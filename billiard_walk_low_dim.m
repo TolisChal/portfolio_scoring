@@ -1,4 +1,8 @@
-function points = billiard_walk_low_dim(R, r, W, N)
+function X = billiard_walk_low_dim(R, r, W, N, psrf_target)
+
+    if (nargin == 4)
+        psrf_target = 1.02;
+    end
     
     n = length(R);
     L = 2;
@@ -23,38 +27,57 @@ function points = billiard_walk_low_dim(R, r, W, N)
     b = b ./ sqrt_sum;
 
     d = size(A, 2);
-    points = zeros(d, N);
-
+    n0 = 2000;
+    points = zeros(d, n0);
+    X = [];
+    N_total = 0;
     
-    for i=1:N
-        for j=1:W
+    while(true)
+        for i=1:n0
+            for j=1:W
             
-            v = randn(d,1);
-            v=v / norm(v);
-            T = rand*L;
-            while(true)
+                v = randn(d,1);
+                v=v / norm(v);
+                T = rand*L;
+                while(true)
         
-                ls = (b - A*x)./(A*v);
-                ls = 1./ls;
-                [lmin, facet] = max(ls);
-                lmin = 1 / lmin;
-                %ls
-                %facet = find(ls==lmin);
+                    ls = (b - A*x)./(A*v);
+                    ls = 1./ls;
+                    [lmin, facet] = max(ls);
+                    lmin = 1 / lmin;
+                    %ls
+                    %facet = find(ls==lmin);
    
-                if (T<=lmin)
-                    x = x + T*v;
-                    break;
-                else
-                    x = x + (0.995*lmin)*v;
-                    T = T - lmin;
-                    v = v -(2*v'*A(facet,:)')*A(facet,:)';
+                    if (T<=lmin)
+                        x = x + T*v;
+                        break;
+                    else
+                        x = x + (0.995*lmin)*v;
+                        T = T - lmin;
+                        v = v -(2*v'*A(facet,:)')*A(facet,:)';
+                    end
                 end
-            end
             
     
+            end
+            points(:,i)=x;
         end
-        points(:,i)=x;
+        N_total = N_total + n0;
+        X = [X points];
+        psrf_iter = max(psrf(X'));
+        if (psrf_iter <= psrf_target & N_total >= N)
+            break;
+        end
+        %x = X_iter(:, n0);
     end
+    
+    %n_out = 0;
+    %for i=1:N
+    %    if (sum((A*points(:,i)-b)>0) > 0)
+    %        n_out = n_out + 1;
+    %    end
+    %end
+    %n_out
 
-    points = NN * points + repmat(shift, [1 N]);
+    X = NN * X + repmat(shift, [1 N_total]);
 end

@@ -72,7 +72,7 @@ function [eps_step, X0, prob_step_in] = Initialize_hmc_leapfrog_Dual_Avg(A, b, X
                     v = v - (eps_step/2) * grad_x;
                     T = eps_step;
                     
-                    lambdas = (b - A*X) ./ A*v;
+                    lambdas = (b - A*X) ./ (A*v);
                     [~, pos_max] = min(1./lambdas);
                     total_num_steps = total_num_steps + 1;
                 

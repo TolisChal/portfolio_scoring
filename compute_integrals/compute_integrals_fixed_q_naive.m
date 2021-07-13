@@ -1,4 +1,4 @@
-function values = compute_integrals_fixed_q_naive(sigma, mu, q, a_vals, N, x0)
+function values = compute_integrals_fixed_q_naive(sigma, mu, q, a_vals, N)
     
     n = length(mu);
     a_vals_sorted = sort(a_vals);

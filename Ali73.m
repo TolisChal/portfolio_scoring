@@ -1,4 +1,4 @@
-function [Score] = Ali73(AssetRet,Ret)
+function [Score] = Ali73(AssetRet, Ret)
 %ALI73 Summary of this function goes here
 %   Detailed explanation goes here
     

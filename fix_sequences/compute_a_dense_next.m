@@ -12,13 +12,13 @@ function [new_a, pts] = compute_a_dense_next(sigma, mu, q, a, x0, N)
     q_mu = q*(mu'*pts);
     
     Sx = sigma*pts;
-    log_xSx = zeros(1,N);
+    log_xSx = zeros(1,size(pts, 2));
     
-    for i=1:N
+    for i=1:size(pts, 2)
         log_xSx(i) = pts(:,i)' * Sx(:,i);
     end
     
-    last_ratio = 0.1;
+    last_ratio = 0.1
     %fn = zeros(its,1);
     while ~done
         a = last_a * ratio^k;

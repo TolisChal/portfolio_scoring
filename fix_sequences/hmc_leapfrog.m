@@ -59,7 +59,7 @@ function XX = hmc_leapfrog(A, b, X0, sigma, mu, a, q, N, step)
                 v = v - (step/2) * grad_x;
                 T = step;
                 
-                lambdas = (b - A*X) ./ A*v;
+                lambdas = (b - A*X) ./ (A*v);
                 [~, pos_max] = min(1./lambdas);
                 
                 while(true)

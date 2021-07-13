@@ -1,5 +1,9 @@
-function X = get_samples(sigma, mu, a, q, N, x0)
+function X = get_samples(sigma, mu, a, q, N, x0, psrf_target)
     
+    if (nargin == 6)
+        psrf_target = 1.02;
+    end
+
     n = length(mu);
     
     A = [ eye(n) ; -eye(n)];
@@ -24,6 +28,8 @@ function X = get_samples(sigma, mu, a, q, N, x0)
     b = b - A * shift;
     A = A * NN;
     
+    mu = (mu - (2/q)*(shift'*sigma)');
+    
     sigma = NN'*sigma*NN;
     mu = (mu' * NN)';
     x0 = NN'*x0;
@@ -33,13 +39,26 @@ function X = get_samples(sigma, mu, a, q, N, x0)
     A = A ./ repmat(sqrt_sum, [1 n-1]);
     b = b ./ sqrt_sum;
     %sqrt_sum = sqrt(sum(A.^2,2))
-    
+    %A*x0-b
     [eps_step, x0, ~] = Initialize_hmc_leapfrog_Dual_Avg(A, b, x0, sigma, mu, a, q, 1000, 0.65);
+    %A*x0-b
     %eps_step
-    X = hmc_leapfrog(A, b, x0, sigma, mu, a, q, N, eps_step/4);
+    n0 = 2000;
+    N_total = 0;
+    X = [];
+    while(true)
+        X_iter = hmc_leapfrog(A, b, x0, sigma, mu, a, q, n0, eps_step/4);
+        N_total = N_total + n0;
+        X = [X X_iter];
+        psrf_iter = max(psrf(X'));
+        if (psrf_iter <= psrf_target & N_total >= N)
+            break;
+        end
+        x0 = X_iter(:, n0);
+    end
     %X = hmc_leapfrog(A, b, x0, sigma, mu, a, q, N);
     
-    X = NN * X + repmat(shift, [1 N]);
+    X = NN * X + repmat(shift, [1 N_total]);
 
 end
 

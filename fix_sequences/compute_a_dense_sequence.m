@@ -1,9 +1,9 @@
-function [a_vals, samples] = compute_a_dense_sequence(sigma, mu, q, a_max, x0, N)
+function [a_vals, samples] = compute_a_dense_sequence(sigma, mu, q, a_max, a_stop, x0, N)
 
     curr_fn=3;
     %curr_its=1;
     
-    a_stop = 0;
+    %a_stop = 0;
     it = 1;
     a_vals(it) = a_max;
     
@@ -21,9 +21,9 @@ function [a_vals, samples] = compute_a_dense_sequence(sigma, mu, q, a_max, x0, N
         q_mu = q*(mu'*pts);
     
         Sx = sigma*pts;
-        log_xSx = zeros(1,N);
+        log_xSx = zeros(1,size(pts, 2));
     
-        for i=1:N
+        for i=1:size(pts, 2)
             log_xSx(i) = pts(:,i)' * Sx(:,i);
         end
         curr_fn = mean(exp((- new_a + a) * (log_xSx - q_mu)))
@@ -37,7 +37,7 @@ function [a_vals, samples] = compute_a_dense_sequence(sigma, mu, q, a_max, x0, N
         samples{length(a_vals)} = get_samples(sigma, mu, a_vals(it), q, N, x0);
         %a_vals=a_vals(1:end-1);
     else
-        a_vals=a_vals(1:end-1);
+        a_vals(end) = a_stop;
     end
-
+    
 end
