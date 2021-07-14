@@ -2,7 +2,7 @@ function [new_a, pts] = compute_a_dense_next(sigma, mu, q, a, x0, N)
 
     n = length(mu);
     ratio = 1 - 1/n;
-    C = 2;
+    C = 4;
     last_a = a;
             
     done = 0;
@@ -21,19 +21,20 @@ function [new_a, pts] = compute_a_dense_next(sigma, mu, q, a, x0, N)
     last_ratio = 0.1
     %fn = zeros(its,1);
     while ~done
-        a = last_a * ratio^k;
+        a = last_a * ratio^k
 
         fn = exp((- a + last_a) * (log_xSx - q_mu));
                
         
-        %var(fn)/(mean(fn)^2)
+        (var(fn)/mean(fn))/mean(fn)
+        var(fn)/(mean(fn)^2)
         %mean(fn)/last_ratio
         %mean(fn)
-        ratio_iter = mean(fn)/last_ratio;
+        ratio_iter = mean(fn)/last_ratio
         if (ratio_iter < 1)
-            ratio_iter = 1/ratio_iter;
+            ratio_iter = 1/ratio_iter
         end
-        if (var(fn)/(mean(fn)^2)>=C || ratio_iter<1+1e-5)
+        if ((var(fn)/mean(fn))/mean(fn)<C || ratio_iter<1+1e-5)
             if k~=1
                 
                 k = k/2;

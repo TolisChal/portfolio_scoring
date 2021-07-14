@@ -9,7 +9,7 @@ function [a_vals, samples] = compute_a_dense_sequence(sigma, mu, q, a_max, a_sto
     
     samples = {};
             
-    while (curr_fn>1.5 & a_vals(it) >= a_stop)
+    while (curr_fn>2 & a_vals(it) >= a_stop)
         %curr_its = N;
         a = a_vals(it);
         it = it+1;
@@ -38,6 +38,7 @@ function [a_vals, samples] = compute_a_dense_sequence(sigma, mu, q, a_max, a_sto
         %a_vals=a_vals(1:end-1);
     else
         a_vals(end) = a_stop;
+        samples{length(a_vals)} = get_samples(sigma, mu, a_vals(end), q, N, x0);
     end
     
 end

@@ -1,10 +1,12 @@
-function [int_ratio, const_int_num, const_int_den] = estimate_tele_integral_ratio(sigma, mu, q, as_merged, current_pos, to_pos, R, r, x0, const_int_num, const_int_den, volume_ratio, N)
+function [int_ratio, const_int_num, const_int_den] = estimate_tele_integral_ratio_opt(sigma, mu, q, as_merged, current_pos, to_pos, R, r, x0, const_int_num, const_int_den, volume_ratio, N, samples)
 
     n = length(mu)
+    k = length(as_merged);
     
     for i = current_pos:to_pos
 
-        X1 = get_samples(sigma, mu, as_merged(i), q, N, x0);
+        %X1 = get_samples(sigma, mu, as_merged(i), q, N, x0);
+        X1 = samples{k + 1 - i};
         X2 = get_samples_restricted(sigma, mu, as_merged(i), q, N, R, r);
         
         q_mu = q*(mu'*X1);
@@ -27,3 +29,4 @@ function [int_ratio, const_int_num, const_int_den] = estimate_tele_integral_rati
     int_ratio = volume_ratio * (const_int_num / const_int_den);
 
 end
+

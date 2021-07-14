@@ -1,14 +1,20 @@
-function [as, as_dense, samples] = compute_a_sequence(sigma, mu, q, max_vol, M, x0, N)
+function [as, as_dense, dists_dense, samples] = compute_a_sequence(sigma, mu, q, max_vol, M, x0, N)
 
     n = length(mu);
     
     a_min = (1 / (max_vol + q*max(mu)));    
     a_max = 7*n*n;
     
-    a_max = compute_max_a(sigma, mu, q, x0, 50000, a_max);
+    a_max = compute_max_a(sigma, mu, q, x0, 50000, a_max)
     
     [as_dense, samples] = compute_a_dense_sequence(sigma, mu, q, a_max, a_min, x0, N);
     as_dense
+    
+    %if (length(as_dense) <= (M+1))
+    %    length(as_dense)
+    %    as = as_dense(1:M)
+    %    return
+    %end
     %X = get_samples(sigma, mu, a_min, q, N, x0);
     %get_samples(sigma, mu, a, q, 5000, x0);
     
@@ -19,6 +25,9 @@ function [as, as_dense, samples] = compute_a_sequence(sigma, mu, q, max_vol, M, 
         dists_dense(i+1) = estimate_L2_norm(sigma, mu, q, as_dense(i), as_dense(i+1), samples{i})
         dist_total = dist_total + dists_dense(i);
     end
+    
+    as = as_dense;
+    return;
 
     %cum_dists_dense = cumsum(dists_dense);
     step = dist_total / (M+1);

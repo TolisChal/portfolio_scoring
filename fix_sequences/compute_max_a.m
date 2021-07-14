@@ -6,8 +6,8 @@ function a_max = compute_max_a(sigma, mu, q, x0, N, a)
     X = get_samples(sigma, mu, a, q, N, x0);
     
     dist_max_prev = max(sqrt(sum((X - repmat(x0, [1 size(X,2)])).^2,1)));
-    
-    while (true)
+    iter = 1;
+    while (iter <= 4)
         a = a*ratio;
         X = get_samples(sigma, mu, a, q, N, x0);
         
@@ -20,7 +20,8 @@ function a_max = compute_max_a(sigma, mu, q, x0, N, a)
         end
         dist_max_prev = dist_max;
         
-        
+        iter = iter + 1;
     end
+    a_max = a;
 
 end
