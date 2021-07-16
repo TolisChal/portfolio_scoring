@@ -1,5 +1,5 @@
 function y = low_dispersion(x)
 
-    y = exp(x)-0.8;
+    y = 1.031*exp(x)-0.8;
 
 end

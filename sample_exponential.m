@@ -1,6 +1,6 @@
 function X = sample_exponential(c, T, N, A_add, b_add)
 
-    n = length(c);
+    n = length(c)
     
     psrf_target = 1.02;
     
@@ -30,16 +30,17 @@ function X = sample_exponential(c, T, N, A_add, b_add)
     b = b ./ sqrt_sum;
     %sqrt_sum = sqrt(sum(A.^2,2))
     %A*x0-b
-    [eps_step, x0, ~] = Initialize_hmc_exp_leapfrog_Dual_Avg(A, b, x0, c, T, 1000, 0.65);
-    
+    [eps_step, x0, ~] = Initialize_hmc_exp_leapfrog_Dual_Avg(A, b, x0, c, T, 500, 0.65);
+    eps_step
+    %r
     n0 = 2000;
     N_total = 0;
     X = [];
     while(true)
-        X_iter = hmc_exp_leapfrog(A, b, x0, c, T, n0, eps_step/4);
-        N_total = N_total + n0;
+        X_iter = hmc_exp_leapfrog(A, b, x0, c, T, n0, eps_step);
+        N_total = N_total + n0
         X = [X X_iter];
-        psrf_iter = max(psrf(X'));
+        psrf_iter = max(psrf(X'))
         if (psrf_iter <= psrf_target & N_total >= N)
             break;
         end
