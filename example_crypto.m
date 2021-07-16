@@ -31,10 +31,15 @@ a=2;
 %scatter3(X(1,:),X(2,:),X(3,:),25,vals,'.')
 
 
-Ptf = Sampling_simplex(d,1, 'RM');
+%Ptf = Sampling_simplex(d,1, 'RM');
 
-R = randn(1, d);
-r = R * Ptf;
+%R = randn(1, d);
+%r = R * Ptf;
+
+[OptMVPtf, avg_vol] = compute_avg_volatility_ptf(sigma, mu);
+
+R = Returns_12_coins(days(end)+1, :);
+r = R * OptMVPtf;
 
 integral_ratios = {};
 iter = 1;
