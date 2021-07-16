@@ -2,10 +2,12 @@ function [as, as_dense, dists_dense, samples] = compute_a_sequence(sigma, mu, q,
 
     n = length(mu);
     
-    a_min = (1 / (max_vol + q*max(mu)));    
+    a_min = (1 / (max_vol + q*max(mu)))
     a_max = 10*n*n;
     
+    a_min = compute_min_a(sigma, mu, q, 50000, (a_max+a_min)/2)
     a_max = compute_max_a(sigma, mu, q, x0, 50000, a_max)
+    
     
     [as_dense, samples] = compute_a_dense_sequence(sigma, mu, q, a_max, a_min, x0, N);
     as_dense

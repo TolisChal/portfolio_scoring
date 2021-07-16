@@ -32,16 +32,19 @@ function ratios = compute_integral_ratios_fixed_q_all_opt(sigma, mu, q, a_vals, 
     
     ratios(k) = volume_ratio * (const_int_num / const_int_den);
     
-    for i = 2:(k-1)
+    for i = 2:k
         
         to_pos = i-1;
         a = a_vals_sorted(i);
-        X = get_samples(sigma, mu, a, q, N, x0);
+        %X = get_samples(sigma, mu, a, q, N, x0);
     
-        sc = R * X;
-        int_ratio = sum(sc < r) / size(X, 2)
+        %sc = R * X;
+        %int_ratio = sum(sc < r) / size(X, 2)
         
-        if (int_ratio >= 0.2)
+        sc = R * samples{k+1-i};
+        int_ratio = sum(sc < r) / size(samples{k+1-i}, 2)
+        
+        if (int_ratio >= 2)
             ratios(k+1-i) = int_ratio;
         else
             [int_ratio, const_int_num, const_int_den] = estimate_tele_integral_ratio_opt(sigma, mu, q, a_vals_sorted, pos, to_pos, R, r, x0, const_int_num, const_int_den, volume_ratio, N, samples);
