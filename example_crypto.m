@@ -47,6 +47,7 @@ iter = 1;
 a_dense_all = {};
 dists_all = {};
 integral_ratios_vec = [];
+W = 3;
 for i = qs
     x0 = ptfs(:,iter);
     [as, as_dense, dists_dense, samples] = compute_a_sequence(sigma, mu, i, max_vol, M, x0, N);
@@ -54,8 +55,11 @@ for i = qs
     a_dense_all{iter} = as;
     dists_all{iter} = dists_dense;
     %integral_ratios{iter} = compute_integral_ratios_fixed_q_all(sigma, mu, i, as, x0, N, R, r);
-    integral_ratios{iter} = compute_integral_ratios_fixed_q_all_opt(sigma, mu, i, as, x0, N, R, r, samples);
-    integral_ratios_vec = [integral_ratios_vec integral_ratios{iter}];
+    int_ratios = compute_integral_ratios_fixed_q_all_opt(sigma, mu, i, as, x0, N, R, r, samples);
+    [as, dists, indxs] = cut_as(as, dists_dense, W);
+    int_ratios = int_ratios(indxs);
+    integral_ratios{iter} = int_ratios;
+    integral_ratios_vec = [integral_ratios_vec int_ratios];
     iter = iter + 1
     length(qs)
 end
@@ -64,7 +68,9 @@ integral_ratios_vec(isnan(integral_ratios_vec))=0
 risk_fun = @(x) medium_risk(x);
 dispersion_fun = @(x) low_dispersion(x);
 
-w = compute_weights(a_dense_all, qs, dists_all, risk_fun, dispersion_fun, q_min, q_max);
+w = compute_weights(a_dense_all, vols, dists_all, dispersion_fun, dispersion_fun);
+
+w = -w;
 
 X = sample_exponential(w', 0.01, N);
 x_c = mean(X,2);

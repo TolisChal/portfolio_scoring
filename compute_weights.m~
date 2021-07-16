@@ -1,4 +1,4 @@
-function w = compute_weights(as, vols, dists_dense, risk_fun, dispersion_fun)
+function w = compute_weights(as, qs, vols, dists_dense, risk_fun, dispersion_fun)
     
     
     vols_vals = (vols - vols(1))*(1 ./(vols(end) - vols(1)));
@@ -13,10 +13,11 @@ function w = compute_weights(as, vols, dists_dense, risk_fun, dispersion_fun)
     for i = 1:M1
         a_seq = as{i};
         dists = dists_dense{i};
+        interval_length = sum(dists);
+        cum_sum_dists = cumsum(dists);
         
-        sum_cum_dists = cumsum(dists);
-        dists2 = (sum_cum_dists - sum_cum_dists(1))*(1 ./(sum_cum_dists(end) - sum_cum_dists(1)));
-        a_vals_int = sort(1-dists2);
+        a_vals_int = cum_sum_dists / interval_length;
+        a_vals_int = sort(1 - a_vals_int);
         
         a_vals = dispersion_fun(a_vals_int);
         
