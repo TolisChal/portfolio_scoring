@@ -1,6 +1,12 @@
-function [as, dists_out, index_stop] = cut_as(as, dists)
+function [as, dists_out, index_cut] = cut_as_2(as, dists, W)
     
     M = length(dists);
+    index_cut = 1:W:M;
+    
+    as = as(index_cut);
+    dists_out = dists(index_cut);
+    
+    return
     
     dists_out = dists - 1;
     dists_out(1) = 0

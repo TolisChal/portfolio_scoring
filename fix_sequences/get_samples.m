@@ -40,7 +40,7 @@ function X = get_samples(sigma, mu, a, q, N, x0, psrf_target)
     b = b ./ sqrt_sum;
     %sqrt_sum = sqrt(sum(A.^2,2))
     %A*x0-b
-    [eps_step, x0, ~] = Initialize_hmc_leapfrog_Dual_Avg(A, b, x0, sigma, mu, a, q, 1000, 0.65);
+    [eps_step, x1, ~] = Initialize_hmc_leapfrog_Dual_Avg(A, b, x0, sigma, mu, a, q, 1000, 0.65);
     %A*x0-b
     %eps_step
     n0 = 2000;
