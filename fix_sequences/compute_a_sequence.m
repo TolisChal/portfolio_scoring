@@ -1,4 +1,4 @@
-function [as, as_dense, dists_dense, samples] = compute_a_sequence(sigma, mu, q, max_vol, M, x0, N)
+function [as, as_dense, dists_dense, samples] = compute_a_sequence(sigma, mu, q, max_vol, M, x0, N, R, r)
 
     n = length(mu);
     
@@ -8,6 +8,8 @@ function [as, as_dense, dists_dense, samples] = compute_a_sequence(sigma, mu, q,
     a_min = compute_min_a(sigma, mu, q, 100000, (a_max+a_min)/2, x0)
     %a_max = compute_max_a(sigma, mu, q, x0, 50000, a_max)
     a_max = compute_max_a_2(sigma, mu, q, 200000, (a_max+a_min)/2, x0)
+    %a_max = compute_max_a_3(sigma, mu, q, N, a_max, x0)
+    a_max = compute_max_a_4(sigma, mu, q, N, a_max, x0, R, r)
     %a_max=20000;
     
     [as_dense, samples] = compute_a_dense_sequence(sigma, mu, q, a_max, a_min, x0, N);

@@ -34,6 +34,7 @@ function [new_a, pts] = compute_a_dense_next(sigma, mu, q, a, x0, N)
         if (ratio_iter < 1)
             ratio_iter = 1/ratio_iter
         end
+        done=1;
         if ((var(fn)/mean(fn))/mean(fn)<C || ratio_iter<1+1e-5)
             if k~=1
                 

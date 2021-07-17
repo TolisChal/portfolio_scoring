@@ -18,6 +18,7 @@ function [a_vals, samples] = compute_a_dense_sequence(sigma, mu, q, a_max, a_sto
         [new_a, pts] = compute_a_dense_next(sigma, mu, q, a, x0, N);
         samples{it - 1} = pts;
         a_vals(it) = new_a
+        
        
         q_mu = q*(mu'*pts);
     
@@ -31,6 +32,7 @@ function [a_vals, samples] = compute_a_dense_sequence(sigma, mu, q, a_max, a_sto
         if (curr_fn < 1)
             curr_fn = 1 / curr_fn
         end
+        
         %mean(exp(( new_a - a) * (log_xSx - q_mu)))
     end
     
