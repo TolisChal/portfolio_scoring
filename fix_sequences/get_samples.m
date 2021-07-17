@@ -43,6 +43,8 @@ function X = get_samples(sigma, mu, a, q, N, x0, psrf_target)
     [eps_step, x1, ~] = Initialize_hmc_leapfrog_Dual_Avg(A, b, x0, sigma, mu, a, q, 1000, 0.65);
     %A*x0-b
     %eps_step
+    X_iter = hmc_leapfrog(A, b, x0, sigma, mu, a, q, 1000, eps_step/4);
+    x0 = X_iter(:, 1000);
     n0 = 2000;
     N_total = 0;
     X = [];

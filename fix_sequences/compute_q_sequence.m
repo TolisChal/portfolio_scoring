@@ -97,5 +97,8 @@ function [qs, ptfs, q_min_gl, q_max, vols] = compute_q_sequence(sigma, mu, min_v
     q_min_gl = qs(1);
     q_max = qs(end);
     
-    qs = qs(2:(N+1));
+    qs = qs(2:(end-1));
+    ptfs = ptfs(:,2:(end-1));
+    
+    ptfs
 end

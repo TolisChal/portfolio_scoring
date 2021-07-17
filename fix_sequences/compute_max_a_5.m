@@ -1,10 +1,4 @@
-function a_max = compute_max_a_4(sigma, mu, q, N, a0_max, x0, R, r)
-    
-    left = false;
-    
-    if(R*x0 < r)
-        left = true;
-    end
+function a_max = compute_max_a_5(sigma, mu, q, N, a0_max, x0, R, r)
     
     n = length(mu);
     ratio = 1 + (1/sqrt(n));
@@ -21,14 +15,14 @@ function a_max = compute_max_a_4(sigma, mu, q, N, a0_max, x0, R, r)
         
         vecc = sqrt(sum((X - repmat(x0,[1, size(X,2)])).^2,1));
         length(vecc)
-        max(vecc)
+        rad = max(vecc)
         
         sc=R*X;
         sc = sum(sc<r) / size(X,2)
         %left
-        if (sc>0.95)
+        if (sc>0.95 & rad < 0.15)
             return
-        elseif (sc<0.05)
+        elseif (sc<0.05 & rad < 0.15)
             return
         end
         
