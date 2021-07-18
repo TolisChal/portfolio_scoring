@@ -20,7 +20,7 @@ function w = compute_weights(vols, dists_dense, indx_cuted, risk_fun, dispersion
         sum_cum_dists = cumsum(dists);
         dists2 = (sum_cum_dists - sum_cum_dists(1))*(1 ./(sum_cum_dists(end) - sum_cum_dists(1)));
         dists2 = dists2(indx);
-        a_vals_int = sort(1-dists2);
+        a_vals_int = sort(1-dists2)
         
         %a_vals_int = a_vals_int(k+1-indx)
         

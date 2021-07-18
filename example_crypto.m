@@ -72,7 +72,8 @@ for i = qs
     iter = iter + 1
     length(qs)
 end
-integral_ratios_vec(isnan(integral_ratios_vec))=0
+integral_ratios_vec(isnan(integral_ratios_vec))=0;
+integral_ratios_vec(integral_ratios_vec>1) = 1
 
 risk_fun = @(x) medium_risk(x);
 dispersion_fun = @(x) low_dispersion(x);
