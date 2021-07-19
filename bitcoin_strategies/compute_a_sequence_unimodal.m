@@ -1,19 +1,19 @@
 function [as, as_dense, dists_dense, samples] = compute_a_sequence_unimodal(sigma, max_vol, y0, N, R, r)
 
-    n = length(mu);
+    n = length(y0);
     
-    a_min = (1 / (max_vol + q*max(mu)))
+    a_min = (1 / (sqrt(2)*max(eig(sigma))))
     a_max = 10*n*n;
     
-    a_min = compute_min_a(sigma, mu, q, 100000, (a_max+a_min)/2, x0)
+    a_min = compute_min_a_unimodal(sigma, y0, 100000, (a_max+a_min)/2)
     %a_max = compute_max_a(sigma, mu, q, x0, 50000, a_max)
-    a_max = compute_max_a_2(sigma, mu, q, 200000, (a_max+a_min)/2, x0)
+    a_max = compute_max_a_2_unimodal(sigma, y0, 200000, (a_max+a_min)/2)
     %a_max = compute_max_a_3(sigma, mu, q, N, a_max, x0)
     %a_max = compute_max_a_4(sigma, mu, q, N, a_max, x0, R, r)
-    a_max = compute_max_a_5(sigma, mu, q, N, a_max, x0, R, r)
+    a_max = compute_max_a_5_unimodal(sigma, y0, N, a_max, R, r)
     %a_max=20000;
     
-    [as_dense, samples] = compute_a_dense_sequence(sigma, mu, q, a_max, a_min, x0, N);
+    [as_dense, samples] = compute_a_dense_sequence_unimodal(sigma, y0, a_max, a_min, N);
     as_dense
     
     %if (length(as_dense) <= (M+1))
@@ -28,7 +28,7 @@ function [as, as_dense, dists_dense, samples] = compute_a_sequence_unimodal(sigm
     k = length(as_dense);
     dists_dense(1) = 0;
     for i = 1 : 1:(k-1)
-        dists_dense(i+1) = estimate_L2_norm(sigma, mu, q, as_dense(i), as_dense(i+1), samples{i})
+        dists_dense(i+1) = estimate_L2_norm_unimodal(sigma, y0, as_dense(i), as_dense(i+1), samples{i})
         dist_total = dist_total + dists_dense(i);
     end
     

@@ -10,7 +10,7 @@ days = 400:460;
 Rets = Returns_12_coins(days, :);
 
 d = 12;
-M = 5;
+M = 3;
 
 N = 10000;
 
@@ -19,7 +19,7 @@ mu = (prod(1 + Rets) - 1)';
 [sigma, ~] = covCor(Rets);
 
 [min_vol, max_vol] = compute_min_max_volatility(sigma);
-[qs, ptfs, q_min, q_max, vols] = compute_q_sequence(sigma, mu, min_vol, max_vol, 5);
+[qs, ptfs, q_min, q_max, vols] = compute_q_sequence(sigma, mu, min_vol, max_vol, 3);
 
 %q=qs(2);
 %a=2;
@@ -36,7 +36,8 @@ mu = (prod(1 + Rets) - 1)';
 %R = randn(1, d);
 %r = R * Ptf;
 
-[OptMVPtf, avg_vol] = compute_avg_volatility_ptf(sigma, mu);
+%[OptMVPtf, avg_vol] = compute_avg_volatility_ptf(sigma, mu);
+[OptMVPtf, avg_vol] = compute_2avg_volatility_ptf(sigma, mu);
 
 R = Returns_12_coins(days(end)+1, :);
 r = R * OptMVPtf;
@@ -52,7 +53,7 @@ indxs_cuted = {};
 integral_ratios_vec = [];
 integrals_all = {};
 W = 5;
-MM = 10;
+MM = 4;
 for i = qs
     x0 = ptfs(:,iter);
     [as, as_dense, dists_dense, samples] = compute_a_sequence(sigma, mu, i, max_vol, M, x0, N, R, r);
@@ -78,31 +79,7 @@ integral_ratios_vec(integral_ratios_vec>1) = 1
 risk_fun = @(x) medium_risk(x);
 dispersion_fun = @(x) low_dispersion(x);
 
-w = compute_weights(vols, dists_all, indxs_cuted, dispersion_fun, dispersion_fun);
+w = compute_weights(vols, dists_all, indxs_cuted, risk_fun, dispersion_fun);
 
-w = -w;
-
-X = sample_exponential(w', 0.01, N);
-x_c = mean(X,2);
-%for i = as
-%    figure
-%    Y = get_samples(sigma, mu, i, q, 5000, x0);
-
-%    subplot(1,2,1)
-%    plot3(Y(1,:), Y(2,:), Y(3,:), '.')
-%    xlim([0 1])
-%    ylim([0 1])
-%    zlim([0 1])
-    
-%    Y = get_samples_restricted(sigma, mu, a, q, N, R, r);
-
-%    subplot(1,2,2)
-%    plot3(Y(1,:), Y(2,:), Y(3,:), '.')
-%    xlim([0 1])
-%    ylim([0 1])
-%    zlim([0 1])
-%end
-
-
-
+[Ws, Ts] = compute_multiple_weights(w', N*3);
 

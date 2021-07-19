@@ -1,12 +1,12 @@
-function [OptMVPtf, avg_vol] = compute_avg_volatility_ptf(sigma, mu)
+function [OptMVPtf, avg_vol] = compute_2avg_volatility_ptf(sigma, mu)
 
     n = length(mu);
-    N = 5000000;
+    N = 500000;
     X = Sampling_simplex(n, N, 'RM');
 
     Vols = X' * sigma;
     Vols = sum(Vols' .* X);
-    avg_vol = mean(Vols);
+    avg_vol = 2*mean(Vols);
     
     A = [ eye(n) ; -eye(n)];
     b = [ ones(n,1) ; zeros(n,1)];
