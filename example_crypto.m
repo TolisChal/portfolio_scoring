@@ -14,27 +14,14 @@ M = 3;
 
 N = 10000;
 
-mu = (prod(1 + Rets) - 1)';
+%mu = (prod(1 + Rets) - 1)';
+mu = mean(Rets)';
 
 [sigma, ~] = covCor(Rets);
 
 [min_vol, max_vol] = compute_min_max_volatility(sigma);
 [qs, ptfs, q_min, q_max, vols] = compute_q_sequence(sigma, mu, min_vol, max_vol, 3);
 
-%q=qs(2);
-%a=2;
-
-%X = Sampling_simplex(d, 10000, 'RM');
-
-%vals = Evaluate_density(X, sigma, mu, a, q);
-
-%scatter3(X(1,:),X(2,:),X(3,:),25,vals,'.')
-
-
-%Ptf = Sampling_simplex(d,1, 'RM');
-
-%R = randn(1, d);
-%r = R * Ptf;
 
 %[OptMVPtf, avg_vol] = compute_avg_volatility_ptf(sigma, mu);
 [OptMVPtf, avg_vol] = compute_2avg_volatility_ptf(sigma, mu);
@@ -52,6 +39,7 @@ dists_all = {};
 indxs_cuted = {};
 integral_ratios_vec = [];
 integrals_all = {};
+samples_all = {};
 W = 5;
 MM = 4;
 for i = qs
@@ -64,6 +52,9 @@ for i = qs
     int_ratios = compute_integral_ratios_fixed_q_all_opt(sigma, mu, i, as, x0, N, R, r, samples);
     integrals_all{iter} = int_ratios;
     [as, dists, indxs] = cut_as_3(as, dists_dense, MM);
+    for j=1:length(indxs)
+        samples_all{length(samples_all)+1} = samples{indxs(j)};
+    end
     a_cuted{iter} = as;
     dists_cuted{iter} = dists;
     int_ratios = int_ratios(indxs);
@@ -78,8 +69,9 @@ integral_ratios_vec(integral_ratios_vec>1) = 1
 
 risk_fun = @(x) medium_risk(x);
 dispersion_fun = @(x) low_dispersion(x);
+low_risk_fun = @(x) low_risk(x);
 
-w = compute_weights(vols, dists_all, indxs_cuted, risk_fun, dispersion_fun);
+w = compute_weights(vols, dists_all, indxs_cuted, low_risk_fun, dispersion_fun);
 
 [Ws, Ts] = compute_multiple_weights(w', N*3);
 

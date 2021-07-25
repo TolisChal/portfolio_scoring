@@ -56,6 +56,9 @@ function X = get_samples(sigma, mu, a, q, N, x0, psrf_target)
         if (psrf_iter <= psrf_target & N_total >= N)
             break;
         end
+        if (N_total >= 100000)
+            break;
+        end
         x0 = X_iter(:, n0);
     end
     %X = hmc_leapfrog(A, b, x0, sigma, mu, a, q, N);

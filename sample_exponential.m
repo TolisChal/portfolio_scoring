@@ -1,4 +1,4 @@
-function X = sample_exponential(c, T, N, A_add, b_add)
+function X = sample_exponential(c, T, N, x0, A_add, b_add)
 
     n = length(c);
     
@@ -9,7 +9,7 @@ function X = sample_exponential(c, T, N, A_add, b_add)
     Aeq = [ ones(1,n) ];
     beq = [ 1 ];
 
-    if (nargin > 3)
+    if (nargin > 4)
         A = [A; A_add];
         b = [b; b_add];
     end
@@ -23,16 +23,19 @@ function X = sample_exponential(c, T, N, A_add, b_add)
     
     c = (c' * NN)';
     
-    [x0, ~]=get_cheb(A,b);
+    %[x0, ~]=get_cheb(A,b);
+    x0 = NN'*x0;
     
     sqrt_sum = sqrt(sum(A.^2,2));
     A = A ./ repmat(sqrt_sum, [1 n-1]);
     b = b ./ sqrt_sum;
     %sqrt_sum = sqrt(sum(A.^2,2))
     %A*x0-b
-    [eps_step, x0, ~] = Initialize_hmc_exp_leapfrog_Dual_Avg(A, b, x0, c, T, 500, 0.65);
+    [eps_step, x1, ~] = Initialize_hmc_exp_leapfrog_Dual_Avg(A, b, x0, c, T, 500, 0.65);
     %eps_step
     %r
+    X_iter = hmc_exp_leapfrog(A, b, x0, c, T, 1000, eps_step);
+    x0 = X_iter(:,1000);
     n0 = 2000;
     N_total = 0;
     X = [];

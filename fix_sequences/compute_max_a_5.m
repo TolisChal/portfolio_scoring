@@ -20,9 +20,9 @@ function a_max = compute_max_a_5(sigma, mu, q, N, a0_max, x0, R, r)
         sc=R*X;
         sc = sum(sc<r) / size(X,2)
         %left
-        if (sc>0.95 & rad < 0.11)
+        if ((sc>0.95 & rad < 0.11) || rad<0.09)
             return
-        elseif (sc<0.05 & rad < 0.11)
+        elseif ((sc<0.05 & rad < 0.11) || rad<0.09)
             return
         end
         

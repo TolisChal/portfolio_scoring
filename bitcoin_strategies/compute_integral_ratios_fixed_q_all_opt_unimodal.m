@@ -44,7 +44,7 @@ function ratios = compute_integral_ratios_fixed_q_all_opt_unimodal(sigma, y0, a_
         sc = R * samples{k+1-i};
         int_ratio = sum(sc < r) / size(samples{k+1-i}, 2)
         
-        if (int_ratio >= 2)
+        if (int_ratio >= 0.9)
             ratios(k+1-i) = int_ratio;
         else
             [int_ratio, const_int_num, const_int_den] = estimate_tele_integral_ratio_opt_unimodal(sigma, y0, a_vals_sorted, pos, to_pos, R, r, const_int_num, const_int_den, volume_ratio, N, samples);

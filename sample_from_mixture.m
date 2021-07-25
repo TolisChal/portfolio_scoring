@@ -3,7 +3,7 @@ function X = sample_from_mixture(w, samples, N)
     n = length(w);
     
     M = length(samples);
-    num_mix = 0;
+    %num_mix = 0;
     samples_all = {};
     
     counter = 1;
