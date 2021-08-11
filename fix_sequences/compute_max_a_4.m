@@ -24,7 +24,7 @@ function a_max = compute_max_a_4(sigma, mu, q, N, a0_max, x0, R, r)
         max(vecc)
         
         sc=R*X;
-        sc = sum(sc<r) / size(X,2)
+        sc = sum(sc<r) / size(X,2);
         %left
         if (sc>0.95)
             return

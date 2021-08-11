@@ -23,7 +23,7 @@ function a_next = compute_next_a(sigma, mu, a, a_min, q, X, dist)
         iter = iter + 1;
     end
     a_next = a_med;
-    d
-    dist
+    %d
+    %dist
 end
 

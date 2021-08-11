@@ -42,13 +42,13 @@ function ratios = compute_integral_ratios_fixed_q_all_opt(sigma, mu, q, a_vals, 
         %int_ratio = sum(sc < r) / size(X, 2)
         
         sc = R * samples{k+1-i};
-        int_ratio = sum(sc < r) / size(samples{k+1-i}, 2)
+        int_ratio = sum(sc < r) / size(samples{k+1-i}, 2);
         
-        if (int_ratio >= 2)
+        if (int_ratio >= 0.8)
             ratios(k+1-i) = int_ratio;
         else
             [int_ratio, const_int_num, const_int_den] = estimate_tele_integral_ratio_opt(sigma, mu, q, a_vals_sorted, pos, to_pos, R, r, x0, const_int_num, const_int_den, volume_ratio, N, samples);
-            int_ratio
+            %int_ratio
             ratios(k+1-i) = int_ratio;
             pos = i;
         end

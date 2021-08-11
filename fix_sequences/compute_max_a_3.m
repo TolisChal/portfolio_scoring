@@ -10,8 +10,8 @@ function a_max = compute_max_a_3(sigma, mu, q, N, a0_max, x0)
     
     while(curr_fn < 3.35*(10^8))
         
-        a_prev = a_max
-        a_max = a_max*ratio
+        a_prev = a_max;
+        a_max = a_max*ratio;
         
         X = get_samples(sigma, mu, a_max, q, N, x0);
     
@@ -24,7 +24,7 @@ function a_max = compute_max_a_3(sigma, mu, q, N, a0_max, x0)
             log_xSx(i) = X(:,i)' * Sx(:,i);
         end
         
-        curr_fn = mean(exp((- a_max + a_prev) * (log_xSx - q_mu)))
+        curr_fn = mean(exp((- a_max + a_prev) * (log_xSx - q_mu)));
         
     end
     

@@ -1,6 +1,6 @@
 function [int_ratio, const_int_num, const_int_den] = estimate_tele_integral_ratio_opt(sigma, mu, q, as_merged, current_pos, to_pos, R, r, x0, const_int_num, const_int_den, volume_ratio, N, samples)
 
-    n = length(mu)
+    n = length(mu);
     k = length(as_merged);
     
     for i = current_pos:to_pos

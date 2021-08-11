@@ -25,7 +25,7 @@ function a_max = compute_max_a_2(sigma, mu, q, N, a0_max, x0)
         vals = exp(-a_max*(log_xSx - q_mu));
         
         min_val = min(vals);
-        abs(max_val / min_val)
+        %abs(max_val / min_val)
         if (abs(max_val / min_val) > 10^100) 
             return
         end

@@ -43,7 +43,7 @@ function [qs, ptfs, q_min_gl, q_max, vols] = compute_q_sequence(sigma, mu, min_v
     q_max_prev_gl = q_max_prev;
     while (true)
         
-        q = (q_max+q_max_prev)/2
+        q = (q_max+q_max_prev)/2;
         
         Ptf = fmincon(@(x) target_q_volatility_fun(x, sigma, mu, q), Ptf_q, A, b, Aeq, beq, [], [], [], options);
         vol = Ptf'*sigma*Ptf;
@@ -61,7 +61,7 @@ function [qs, ptfs, q_min_gl, q_max, vols] = compute_q_sequence(sigma, mu, min_v
     end
     
     step = (max_vol - min_vol) / (N+1);
-    vols = min_vol:step:max_vol
+    vols = min_vol:step:max_vol;
     %vols = vols(2:end-1);
 
     counter = 1;
@@ -82,7 +82,7 @@ function [qs, ptfs, q_min_gl, q_max, vols] = compute_q_sequence(sigma, mu, min_v
                 qs(counter) = q;
                 ptfs(:, counter) = Ptf;
                 counter = counter + 1;
-                vol
+                
                 break;
             elseif (vol < i)
                 q_min_iter = q;
@@ -93,12 +93,12 @@ function [qs, ptfs, q_min_gl, q_max, vols] = compute_q_sequence(sigma, mu, min_v
         end
         q_min = q;
     end
-    qs
+    %qs
     q_min_gl = qs(1);
     q_max = qs(end);
     
     qs = qs(2:(end-1));
     ptfs = ptfs(:,2:(end-1));
     
-    ptfs
+    %ptfs
 end

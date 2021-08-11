@@ -7,24 +7,24 @@ function [Ws, Ts] = compute_multiple_weights(w, N)
     %T_min = compute_a_min_exponential(w, N, T_min);
     
     %T = 0.01
-    T=0.001;
+    T = T_max;
     ratio = 1 - (1/n);
     Ws = [];
     Ts = [];
     
     opt_ptf = zeros(n,1);
-    opt_ptf(find(w==max(w))) = 1
+    opt_ptf(find(w==max(w))) = 1;
     xc = ones(n,1)/n;
     while(true)
         
         T = T * ratio;
         X = sample_exponential(-w, T, N, xc); %, A_add, b_add)
-        xc = mean(X,2)
+        xc = mean(X,2);
         
         Ws = [Ws; xc'];
         Ts = [Ts T];
         
-        sum(abs(xc - opt_ptf))
+        %sum(abs(xc - opt_ptf))
         if (sum(abs(xc - opt_ptf)) < 0.05)
             return
         end
