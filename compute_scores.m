@@ -1,12 +1,13 @@
-function [parametric_score, Ws, bias_vector, mean_score, a_sequence, q_sequence, volatility_sequence] = compute_scores(sigma, mu, asset_returns, num_rsik_levels, num_dispersion_levels, risk_behavioral_function, dispersion_behavioral_function)
+function [parametric_score, Ws, bias_vector, mean_score, a_sequence, q_sequence, volatility_sequence] = compute_scores(sigma, mu, asset_returns, Ptf, num_risk_levels, num_dispersion_levels, risk_behavioral_function, dispersion_behavioral_function)
 
     N = 10000;
     nassets = length(mu);
 
     [min_vol, max_vol] = compute_min_max_volatility(sigma);
-    [qs, ptfs, q_min, q_max, vols] = compute_q_sequence(sigma, mu, min_vol, max_vol, num_rsik_levels);
+    [qs, ptfs, q_min, q_max, vols] = compute_q_sequence(sigma, mu, min_vol, max_vol, num_risk_levels);
 
-    [OptMVPtf, avg_vol] = compute_2avg_volatility_ptf(sigma, mu);
+    %[OptMVPtf, avg_vol] = compute_2avg_volatility_ptf(sigma, mu);
+    OptMVPtf = Ptf;
     %OptMVPtf
     R = asset_returns;
     r = R * OptMVPtf;
