@@ -1,4 +1,4 @@
-### Supplementary matlab code for the paper "Modeling asset allocations and a new portfolio performance score"
+### Supplementary matlab code for the paper *Modeling asset allocations and a new portfolio performance score*, Digital Finance, Springer 2021.
 
 - **Installation**
 
